@@ -3,8 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Kaizen.Pages.ActionsPage">
     <ContentPage.Content>
-        <StackLayout>
-            <Button x:Name="BtnSyncDateCalls" Text="Synchronize Today Calls" Clicked="BtnSyncDateCalls_Clicked"/>
-        </StackLayout>
+        <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="Start" Margin="20,20,0,0" Spacing="20" >
+            <Image Source="processing.png"  WidthRequest="100" HeightRequest="100"  />
+            <Label Text="Synchronize Today Calls" WidthRequest="100" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />               
+            <StackLayout.GestureRecognizers>
+                <TapGestureRecognizer x:Name="SynchronizeTodayCalls" Tapped="SynchronizeTodayCalls_Tapped"/>
+            </StackLayout.GestureRecognizers>            
+        </StackLayout>        
     </ContentPage.Content>
 </ContentPage>

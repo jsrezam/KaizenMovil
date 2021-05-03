@@ -37,7 +37,7 @@ namespace Kaizen.Pages
 
         private void TapLogout_Tapped(object sender, EventArgs e)
         {
-            SecureStorage.Remove("token");
+            SecureStorage.RemoveAll();
             Application.Current.MainPage = new NavigationPage(new LoginPage());
         }
         

@@ -1,4 +1,7 @@
-﻿using Kaizen.Interfaces;
+﻿using Acr.UserDialogs;
+using Kaizen.Interfaces;
+using Kaizen.Models;
+using Kaizen.Services;
 using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using System;
@@ -16,13 +19,21 @@ namespace Kaizen.Pages
     public partial class ActionsPage : ContentPage
     {
         private const string APP_NAME = "Kaizen";
+        private readonly ApiService apiService;
         public ActionsPage()
         {
             InitializeComponent();
+            this.apiService = new ApiService();
         }
-               
+
         [Obsolete]
-        private async Task LoadCallLog()
+        private IEnumerable<CallLogModel> LoadCallLog()
+        {
+            return DependencyService.Get<ICallLog>().GetCallLogs();
+        }
+
+        [Obsolete]
+        private async void SynchronizeTodayCalls_Tapped(object sender, EventArgs e)
         {
             try
             {
@@ -32,7 +43,9 @@ namespace Kaizen.Pages
                 {
                     if (await CrossPermissions.Current.ShouldShowRequestPermissionRationaleAsync(Permission.Contacts))
                     {
-                        await DisplayAlert(APP_NAME, "Permissions are required to access contacts", "OK");
+                        await DisplayAlert(title: APP_NAME,
+                            message: "Permissions are required to access contacts",
+                            cancel: "OK");
                     }
 
                     var results = await CrossPermissions.Current.RequestPermissionsAsync(Permission.Contacts, Permission.Phone);
@@ -45,37 +58,37 @@ namespace Kaizen.Pages
 
                 if (statusContact == PermissionStatus.Granted && statusPhone == PermissionStatus.Granted)
                 {
-                    //CallLogList.IsRefreshing = true;
+                    var callsLog = LoadCallLog();
+                    if (callsLog.Count() > 0)
+                    {
+                        UserDialogs.Instance.ShowLoading(title: "Processing");
+                        await apiService.SynchronizeTodayCalls(callsLog);
+                        UserDialogs.Instance.HideLoading();
 
-                    var callsLog = DependencyService.Get<ICallLog>().GetCallLogs();
-                    
-                    //CallLogList.IsRefreshing = false;
-                    //CallLogList.ItemsSource = Logg;
+                        await DisplayAlert(title: "Synchronize Today Calls",
+                            message: "Synchronization was successful",
+                            cancel: "Ok");
+                    }
+                    else
+                    {
+                        await DisplayAlert(title: "Synchronize Today Calls",
+                            message: "No calls to sync",
+                            cancel: "Ok");
+                    }
                 }
                 else if (statusContact != PermissionStatus.Unknown || statusPhone == PermissionStatus.Unknown)
                 {
-                    await DisplayAlert(APP_NAME, "Permission was denied. We cannot continue, please try again.", "OK");
+                    await DisplayAlert(title: APP_NAME,
+                        message: "Permission was denied. We cannot continue, please try again.",
+                        cancel: "OK");
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                //activity_indicator.IsRunning = false;
-                //activity_indicator.IsVisible = false;
-
-                await DisplayAlert("Call Log", "A problem has occurred, contact customer support. Technical report: " + ex.Message, "OK");
-            }
-            finally
-            {
-                //activity_indicator.IsRunning = false;
-                //activity_indicator.IsVisible = false;
+                await DisplayAlert(title: "Synchronize Today Calls",
+                    message: "An unexpected problem has occurred",
+                    cancel: "OK");
             }
         }
-
-        [Obsolete]
-        private async void BtnSyncDateCalls_Clicked(object sender, EventArgs e)
-        {
-            await LoadCallLog();
-        }
-        
     }
 }

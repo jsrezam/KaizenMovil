@@ -13,9 +13,11 @@ namespace Kaizen.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class LoginPage : ContentPage
     {
+        private readonly ApiService apiService;
         public LoginPage()
         {
             InitializeComponent();
+            this.apiService = new ApiService();
         }
 
         protected override async void OnAppearing()
@@ -27,7 +29,6 @@ namespace Kaizen.Pages
                 var token = await SecureStorage.GetAsync("token");
                 if (!string.IsNullOrEmpty(token))
                     Application.Current.MainPage = new MasterPage();
-
             }
             catch
             {
@@ -38,14 +39,12 @@ namespace Kaizen.Pages
         [Obsolete]
         private async void LogIn_Clicked(object sender, EventArgs e)
         {
-            ApiService apiService = new ApiService();
             var response = await apiService.Login(EnTEmail.Text, EnTPassword.Text);
             if (!response)
             {
                 await DisplayAlert("Error", "Something goes wrong", "Alright");
                 return;
             }
-
             Application.Current.MainPage = new MasterPage();
         }
     }

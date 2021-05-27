@@ -33,7 +33,9 @@ namespace Kaizen.Models
         {
             get
             {
-                return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(this.CallDateTick);
+                return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+                    .AddMilliseconds(this.CallDateTick)
+                    .ToLocalTime();
             }
         }
 
@@ -41,6 +43,6 @@ namespace Kaizen.Models
 
         public string CallTitle { get => $"{CallNumber} - {CallName}"; }
         public string CallDescription { get => $"{CallDate.ToString("g", CultureInfo.CreateSpecificCulture("es-mx"))} - {CallType} | Duración: {CallDurationFormat}"; }
-        public int CallTimes { get; set; }
+        public int TotalCallsNumber { get; set; }
     }
 }

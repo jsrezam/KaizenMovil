@@ -71,7 +71,7 @@ namespace Kaizen.Droid.Interfaces
                         .Where(cl => cl.CallDate > new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0) && cl.CallType.Equals("Outgoing"))
                         .GroupBy(cl => cl.CallNumberFormatted, StringComparer.OrdinalIgnoreCase)
                         .Where(cl => cl.Count() >= 1)
-                        .Select(cl => new { CallNumberFormatted = cl.Key, CallTimes = cl.Count() }).ToList();
+                        .Select(cl => new { CallNumberFormatted = cl.Key, TotalCallsNumber = cl.Count() }).ToList();
 
             var todayCalls =
                         calls.Where(cl => cl.CallDate > new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0) && cl.CallType.Equals("Outgoing"))
@@ -89,7 +89,7 @@ namespace Kaizen.Droid.Interfaces
                         CallName = tc.CallName,
                         CallType = tc.CallType,
                         CallNumber = tc.CallNumber,
-                        CallTimes = tcr.CallTimes
+                        TotalCallsNumber = tcr.TotalCallsNumber
                     }).ToList();
         }
     }

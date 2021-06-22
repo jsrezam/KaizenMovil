@@ -1,12 +1,102 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Kaizen.Pages.UserCampaignsPage">
+             xmlns:lottie="clr-namespace:Lottie.Forms;assembly=Lottie.Forms"
+             x:Class="Kaizen.Pages.UserCampaignsPage"
+             Title="My Campaigns">
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to My Campaigns Page!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+        <!--<AbsoluteLayout>
+            <ListView x:Name="campaignList" ItemSelected="CampaignList_ItemSelected" SeparatorColor="#BEC7C7" HasUnevenRows="True">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Frame Padding="5">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="0.33*"/>
+                                        <RowDefinition Height="0.33*"/>
+                                        <RowDefinition Height="0.33*"/>
+                                    </Grid.RowDefinitions>
+                                    <Label Text="ID" TextColor="#BB2020" Grid.Row="0" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="Center"/>
+                                    <Label Text="{Binding Id}" TextColor="#BEC7C7" Grid.Row="0" Grid.Column="1" VerticalOptions="Center" HorizontalOptions="Center" />
+                                    <Label Text="StartDate" TextColor="#BB2020" Grid.Row="1" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="Center"/>
+                                    <Label Text="{Binding StartDate}" TextColor="#BEC7C7" Grid.Row="1" Grid.Column="1" VerticalOptions="Center" HorizontalOptions="Center" />
+                                    <Label Text="FinishDate" TextColor="#BB2020" Grid.Row="2" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="Center"/>
+                                    <Label Text="{Binding FinishDate}" TextColor="#BEC7C7" Grid.Row="2" Grid.Column="1" VerticalOptions="Center" HorizontalOptions="Center"/>
+                                    <Label Text="Progress" TextColor="#BB2020" Grid.Row="0" Grid.Column="2" VerticalOptions="Center" HorizontalOptions="Center"/>
+                                    <ProgressBar Progress="{Binding BarProgress}" ProgressColor="#FFEB4D" Grid.Row="1" Grid.Column="2" />
+                                    <Label Text="{Binding ProgressFormat}" TextColor="#FFEB4D" Grid.Row="2" Grid.Column="2" VerticalOptions="Center" HorizontalOptions="Center"/>
+                                </Grid>
+                            </Frame>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </AbsoluteLayout>-->
+        <RefreshView x:Name="refreshView" Refreshing="refreshView_Refreshing">
+            <StackLayout>
+                <CollectionView  x:Name="campaignList" 
+                             SelectionMode="Single"
+                             SelectionChanged="campaignList_SelectionChanged">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Padding="5">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="0.33*"/>
+                                        <RowDefinition Height="0.33*"/>
+                                        <RowDefinition Height="0.33*"/>
+                                    </Grid.RowDefinitions>
+                                    <Label Text="ID" TextColor="#BB2020" Grid.Row="0" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="Center"/>
+                                    <Label Text="{Binding Id}" TextColor="#BEC7C7" Grid.Row="0" Grid.Column="1" VerticalOptions="Center" HorizontalOptions="Center" />
+                                    <Label Text="StartDate" TextColor="#BB2020" Grid.Row="1" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="Center"/>
+                                    <Label Text="{Binding StartDate}" TextColor="#BEC7C7" Grid.Row="1" Grid.Column="1" VerticalOptions="Center" HorizontalOptions="Center" />
+                                    <Label Text="FinishDate" TextColor="#BB2020" Grid.Row="2" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="Center"/>
+                                    <Label Text="{Binding FinishDate}" TextColor="#BEC7C7" Grid.Row="2" Grid.Column="1" VerticalOptions="Center" HorizontalOptions="Center"/>
+                                    <Label Text="Progress" TextColor="#BB2020" Grid.Row="0" Grid.Column="2" VerticalOptions="Center" HorizontalOptions="Center"/>
+                                    <ProgressBar Progress="{Binding BarProgress}" ProgressColor="#FFEB4D" Grid.Row="1" Grid.Column="2" />
+                                    <Label Text="{Binding ProgressFormat}" TextColor="#FFEB4D" Grid.Row="2" Grid.Column="2" VerticalOptions="Center" HorizontalOptions="Center"/>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                    <CollectionView.EmptyView>
+                        <ContentView>
+                            <StackLayout>
+                                <StackLayout Orientation="Horizontal" Margin="0,210,0,0">
+                                    <lottie:AnimationView x:Name="lottie" 
+                                                          Animation="emptyBasket.json" 
+                                                          AutoPlay="True" 
+                                                          RepeatMode="Infinite" 
+                                                          WidthRequest="120" 
+                                                          HeightRequest="120"
+                                                          VerticalOptions="CenterAndExpand"
+                                                          HorizontalOptions="CenterAndExpand">
+                                    </lottie:AnimationView>
+                                </StackLayout>
+                                <StackLayout>
+                                    <Label Text="There are no campaigns assigned yet."
+                                   FontAttributes="Bold"
+                                   FontSize="Medium"
+                                   TextColor="White" 
+                                   HorizontalOptions="Fill"
+                                   HorizontalTextAlignment="Center" />
+                                </StackLayout>
+                            </StackLayout>                           
+                        </ContentView>
+                    </CollectionView.EmptyView>
+                </CollectionView>                
+            </StackLayout>            
+        </RefreshView>       
     </ContentPage.Content>
 </ContentPage>

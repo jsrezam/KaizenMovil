@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Kaizen.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,5 +17,6 @@ namespace Kaizen.Pages
         {
             InitializeComponent();
         }
+        
     }
 }

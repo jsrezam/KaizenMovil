@@ -34,43 +34,52 @@ namespace Kaizen.Services
 
         public async Task<bool> Login(string user, string password) 
         {
-            try
+            var authentication = new { email = user, password };
+            var json = JsonConvert.SerializeObject(authentication);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await this.httpClient.PostAsync($"{this.apiEndpoint}/accounts/login", content);
+            var contentResponse = response.Content.ReadAsStringAsync().Result;
+
+            if (response.IsSuccessStatusCode)
             {
-                var authentication = new
-                {
-                    email = user,
-                    password
-                };
-                var json = JsonConvert.SerializeObject(authentication);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await this.httpClient.PostAsync($"{this.apiEndpoint}/accounts/login", content);
-                var contentResponse = response.Content.ReadAsStringAsync().Result;
                 var token = JsonConvert.DeserializeObject<AuthenticationResponse>(contentResponse).Token;
                 await SecureStorage.SetAsync("token", token);
-
                 return response.IsSuccessStatusCode;
             }
-            catch(Exception ex)
+            else 
             {
-                return false;
-            }
+                throw new Exception(contentResponse);
+            }            
         }
 
-        //public async Task<User> GetUserByEmail(string email) 
-        //{
-        //    var token = await SecureStorage.GetAsync("token");
-        //    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-        //    var response = await httpClient.GetStringAsync($"{apiEndpoint}/users/{email}");
-        //    return JsonConvert.DeserializeObject<User>(response);
-        //}
+        public async Task<bool> SignUp(UserCredentials userCredentials)
+        {
+            var json = JsonConvert.SerializeObject(userCredentials);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await this.httpClient.PostAsync($"{this.apiEndpoint}/accounts/signUp", content);
+            var contentResponse = await response.Content.ReadAsStringAsync();
+            
+
+
+            if (response.IsSuccessStatusCode)
+                return response.IsSuccessStatusCode;
+            else 
+                throw new Exception(ParseErrorsAPI(JsonConvert
+                    .DeserializeObject<IEnumerable<SignUpResponse>>(contentResponse)));
+        }
+
+        public async Task<QueryResult<Campaign>> GetAgentValidCampaigns()
+        {
+            var token = await SecureStorage.GetAsync("token");
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var response = await httpClient.GetStringAsync($"{this.apiEndpoint}/campaigns/agents/valids");
+            return JsonConvert.DeserializeObject<QueryResult<Campaign>>(response);
+        }
 
         public async Task<bool> SynchronizeTodayCalls(IEnumerable<CallLogModel> callLogs) 
         {
             try
             {
-                //var email = await SecureStorage.GetAsync("user");
-                //var user = await GetUserByEmail(email);
-
                 var token = await SecureStorage.GetAsync("token");
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 var json = JsonConvert.SerializeObject(callLogs);
@@ -82,7 +91,16 @@ namespace Kaizen.Services
             {
                 return false;                
             }
+        }
 
+        private string ParseErrorsAPI(IEnumerable<SignUpResponse> responses) 
+        {
+            string messageError = string.Empty;
+            foreach (var response in responses)
+            {
+                messageError += response.Description + "\n";
+            }
+            return messageError;
         }
     }
 }

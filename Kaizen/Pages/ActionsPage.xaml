@@ -1,9 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Kaizen.Pages.ActionsPage">
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             x:Class="Kaizen.Pages.ActionsPage"
+             Title="Actions">
     <ContentPage.Content>
-        <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="Start" Margin="20,20,0,0" Spacing="20" >
+        <StackLayout 
+            Orientation="Horizontal" 
+            HorizontalOptions="Center" 
+            VerticalOptions="Start" 
+            Margin="20,20,0,0" 
+            Spacing="20" 
+            xct:TouchEffect.AnimationDuration="200"
+            xct:TouchEffect.PressedScale="0.9"
+            xct:TouchEffect.PressedOpacity="0.1"
+            >
             <Image Source="processing.png"  WidthRequest="100" HeightRequest="100"  />
             <Label Text="Synchronize Today Calls" WidthRequest="100" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />               
             <StackLayout.GestureRecognizers>

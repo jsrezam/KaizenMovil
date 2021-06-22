@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Kaizen.Pages.RegistryPage">
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <StackLayout Grid.Row="0" Margin="0,0,0,0" HorizontalOptions="Center">
+                <Label Text="Sign Up" FontSize="Header" TextColor="#F7E1EE"/>
+            </StackLayout>
+            <StackLayout Grid.Row="1" Margin="40,0,40,0" VerticalOptions="CenterAndExpand">
+                <Label Text="Basics:" FontSize="Medium" TextColor="#BB2020"/>
+                <Entry x:Name="enTFirstName" TextColor="#FFEB4D" Placeholder="First Name" PlaceholderColor="#F7E1EE"/>
+                <Entry x:Name="enTLastName" TextColor="#FFEB4D" Placeholder="Last Name" PlaceholderColor="#F7E1EE"/>
+                <Entry x:Name="enTIdentificationCard" TextColor="#FFEB4D" Placeholder="Identification Card" PlaceholderColor="#F7E1EE"/>
+                <Entry x:Name="enTCellPhone" TextColor="#FFEB4D" Placeholder="Cell Phone" PlaceholderColor="#F7E1EE"/>
+                <Label Text="Credentials:" FontSize="Medium" TextColor="#BB2020"/>
+                <Entry x:Name="enTEmail" TextColor="#F7E1EE" Placeholder="Email" PlaceholderColor="#F7E1EE"/>
+                <Entry x:Name="enTPassword" TextColor="#F7E1EE" Placeholder="Password" PlaceholderColor="#F7E1EE" IsPassword="True"/>
+                <Entry x:Name="enTConfirmPassword" TextColor="#F7E1EE" Placeholder="Confrim Password" PlaceholderColor="#F7E1EE" IsPassword="True"/>
+                <Button x:Name="signUp" Margin="10" Text="sign Up !" BackgroundColor="#3AC6F2" TextColor="White" CornerRadius="15" HeightRequest="40" Clicked="SignUp_Clicked"/>
+            </StackLayout>            
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

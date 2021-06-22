@@ -39,13 +39,26 @@ namespace Kaizen.Pages
         [Obsolete]
         private async void LogIn_Clicked(object sender, EventArgs e)
         {
-            var response = await apiService.Login(EnTEmail.Text, EnTPassword.Text);
-            if (!response)
+            try
             {
-                await DisplayAlert("Error", "Something goes wrong", "Alright");
-                return;
+                this.activityIndicator.IsRunning = true;
+                if (string.IsNullOrEmpty(EnTEmail.Text) || string.IsNullOrEmpty(EnTPassword.Text)) return;
+                await apiService.Login(EnTEmail.Text, EnTPassword.Text);
+                Application.Current.MainPage = new MasterPage();
+                this.activityIndicator.IsRunning = false;
             }
-            Application.Current.MainPage = new MasterPage();
+            catch (Exception ex)
+            {
+
+                await DisplayAlert("Error", ex.Message, "Alright"); 
+                this.activityIndicator.IsRunning = false;
+            }           
+            
+        }
+
+        private void TapSigUp_Tapped(object sender, EventArgs e)
+        {
+            Navigation.PushAsync(new RegistryPage());
         }
     }
 }

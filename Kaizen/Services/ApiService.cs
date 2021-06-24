@@ -44,6 +44,7 @@ namespace Kaizen.Services
             {
                 var token = JsonConvert.DeserializeObject<AuthenticationResponse>(contentResponse).Token;
                 await SecureStorage.SetAsync("token", token);
+                await SecureStorage.SetAsync("userName", authentication.email);
                 return response.IsSuccessStatusCode;
             }
             else 
@@ -76,6 +77,14 @@ namespace Kaizen.Services
             return JsonConvert.DeserializeObject<QueryResult<Campaign>>(response);
         }
 
+        public async Task<QueryResult<CampaignDetail>> GetCampaignDetail(string campaignId)
+        {
+            var token = await SecureStorage.GetAsync("token");
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var response = await httpClient.GetStringAsync($"{this.apiEndpoint}/campaignDetails/{campaignId}?ApplyPagingFromClient=true");
+            return JsonConvert.DeserializeObject<QueryResult<CampaignDetail>>(response);
+        }
+
         public async Task<bool> SynchronizeTodayCalls(IEnumerable<CallLogModel> callLogs) 
         {
             try
@@ -87,9 +96,33 @@ namespace Kaizen.Services
                 var response = await this.httpClient.PostAsync($"{this.apiEndpoint}/calls/synchronize", content);
                 return response.IsSuccessStatusCode;
             }
-            catch (Exception ex)
+            catch
             {
                 return false;                
+            }
+        }
+
+        public async Task<bool> CloseCampaign(Campaign campaign)
+        {
+            try
+            {
+                var token = await SecureStorage.GetAsync("token");
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+                var json = JsonConvert.SerializeObject(new { 
+                    Id = campaign.Id,
+                    UserId = campaign.User.Id,
+                    StartDate = campaign.StartDate,
+                    FinishDate = campaign.FinishDate,
+                    IsActive =  false
+                });
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = await this.httpClient.PutAsync($"{this.apiEndpoint}/campaigns/{campaign.Id}", content);
+                return response.IsSuccessStatusCode;
+            }
+            catch
+            {
+                return false;
             }
         }
 

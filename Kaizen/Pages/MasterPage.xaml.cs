@@ -13,9 +13,12 @@ namespace Kaizen.Pages
     [Obsolete]
     public partial class MasterPage : MasterDetailPage
     {
-        public MasterPage()
+        public string Username { get; set; }
+        public MasterPage(string username)
         {
             InitializeComponent();
+            this.Username = username;
+            BindingContext = this;
         }
 
         private void TapHome_Tapped(object sender, EventArgs e)

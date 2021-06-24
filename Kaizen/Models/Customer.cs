@@ -21,6 +21,13 @@
         public string Country { get; set; }
         public string HomePhone { get; set; }
         public string CellPhone { get; set; }
+        public string CellPhoneFormat
+        {
+            get
+            {
+                return $"Phone: {CellPhone} ";
+            }
+        }
         public bool State { get; set; }
     }
 }

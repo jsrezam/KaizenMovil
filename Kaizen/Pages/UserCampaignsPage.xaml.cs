@@ -1,13 +1,10 @@
-﻿using Acr.UserDialogs;
+﻿using Kaizen.Core;
+using Kaizen.Enumerations;
 using Kaizen.Models;
 using Kaizen.Services;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -30,7 +27,7 @@ namespace Kaizen.Pages
 
         private async void PopulateCampaigns() 
         {
-            ApiService apiService = new ApiService();
+            var apiService = new ApiService();
             var queryResult = await apiService.GetAgentValidCampaigns();
             this.campaigns = new ObservableCollection<Campaign>();
             foreach (var item in queryResult.Items)
@@ -38,21 +35,16 @@ namespace Kaizen.Pages
                 campaigns.Add(item);
             }
             this.campaignList.ItemsSource = this.campaigns;
-        }
+        }              
 
-        //private void CampaignList_ItemSelected(object sender, SelectedItemChangedEventArgs e)
-        //{
-        //    var campaignDetail = (e.SelectedItem as Campaign).CampaignDetails as IEnumerable<CampaignDetail>;
-        //    Navigation.PushAsync(new CampaignDetailPage(campaignDetail));
-        //}       
-
-        private void campaignList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void CampaignList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var campaignDetail = (e.CurrentSelection[0] as Campaign).CampaignDetails as IEnumerable<CampaignDetail>;
-            Navigation.PushAsync(new CampaignDetailPage(campaignDetail));
+            var campaign = e.CurrentSelection[0] as Campaign;
+            await Synchronization.RequestDevicePermissions();
+            await Navigation.PushAsync(new CampaignDetailPage(campaign.Id));
         }
 
-        private void refreshView_Refreshing(object sender, EventArgs e)
+        private void RefreshView_Refreshing(object sender, EventArgs e)
         {
             try
             {
@@ -62,6 +54,24 @@ namespace Kaizen.Pages
             {
                 this.refreshView.IsRefreshing = false;
             }            
+        }
+
+        private async void Button_Clicked(object sender, EventArgs e)
+        {
+            var campaign = ((Button)sender).CommandParameter as Campaign;
+            
+            if (campaign.CampaignDetails.Where(cd => cd.State.Equals(CampaignStatus.Uncalled.ToString())).Count() > 0)
+            {
+                await DisplayAlert(
+                    title: "Kaizen",
+                    message: "You cannot close the campaign, you still have offers in progress",
+                    cancel: "OK");
+                return;
+            }
+            
+            var apiService = new ApiService();
+            await apiService.CloseCampaign(campaign);
+            PopulateCampaigns();
         }
     }
 }

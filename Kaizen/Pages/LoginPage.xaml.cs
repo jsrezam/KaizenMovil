@@ -27,8 +27,9 @@ namespace Kaizen.Pages
             try
             {
                 var token = await SecureStorage.GetAsync("token");
+                var userName = await SecureStorage.GetAsync("userName");
                 if (!string.IsNullOrEmpty(token))
-                    Application.Current.MainPage = new MasterPage();
+                    Application.Current.MainPage = new MasterPage(userName);
             }
             catch
             {
@@ -44,7 +45,7 @@ namespace Kaizen.Pages
                 this.activityIndicator.IsRunning = true;
                 if (string.IsNullOrEmpty(EnTEmail.Text) || string.IsNullOrEmpty(EnTPassword.Text)) return;
                 await apiService.Login(EnTEmail.Text, EnTPassword.Text);
-                Application.Current.MainPage = new MasterPage();
+                Application.Current.MainPage = new MasterPage(EnTEmail.Text);
                 this.activityIndicator.IsRunning = false;
             }
             catch (Exception ex)

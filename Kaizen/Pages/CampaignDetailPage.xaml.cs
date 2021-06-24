@@ -1,10 +1,10 @@
-﻿using Kaizen.Models;
+﻿using Kaizen.Core;
+using Kaizen.Enumerations;
+using Kaizen.Models;
+using Kaizen.Services;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -15,52 +15,78 @@ namespace Kaizen.Pages
     public partial class CampaignDetailPage : ContentPage
     {
         public ObservableCollection<CampaignDetail> campaignDetail;
-        private IEnumerable<CampaignDetail> _campaignDetail;
-        public CampaignDetailPage(IEnumerable<CampaignDetail> campaignDetail)
+        private int campaignId;
+        
+        public CampaignDetailPage(int campaignId)
         {
             InitializeComponent();
-            _campaignDetail = campaignDetail;
-            PopulateCampaignDetail(null);
-
+            this.campaignId = campaignId;            
         }
 
-        private void PopulateCampaignDetail(string filter)
+
+        protected async override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            this.searchBar.Text = string.Empty;
+            var response = await Synchronization.CheckDevicePermissions();
+            if (response) await Synchronization.SynchronizeTodayCalls();
+            PopulateCampaignDetail();
+        }
+
+        private async void PopulateCampaignDetail(string filter = null)
         {
             this.campaignDetail = new ObservableCollection<CampaignDetail>();
-            foreach (var item in _campaignDetail)
+            var apiService = new ApiService();
+            var response = (await apiService.GetCampaignDetail(campaignId.ToString())).Items;
+            campaignDetail.Clear();
+
+            foreach (var item in response)
             {
-                campaignDetail.Add(item);
+                if(!item.State.Equals(CampaignStatus.Earned.ToString()))
+                    campaignDetail.Add(item);
             }
-           if (string.IsNullOrEmpty(filter))
-            {
-                this.detailCampaigList.ItemsSource = this.campaignDetail
-                .OrderByDescending(cd => cd.State)
-                .ThenBy(cd => cd.Customer.LastName);
-            }
-            else 
+
+            this.searchBar.IsVisible = (campaignDetail.Count > 0) ?  true : false;
+
+            if (!string.IsNullOrEmpty(filter))
             {
                 this.detailCampaigList.ItemsSource = this.campaignDetail
                 .Where(dc => dc.Customer.FullName.ToUpper().StartsWith(filter))
-                    .OrderByDescending(cd => cd.State)
-                .ThenBy(cd => cd.Customer.LastName);
+                .OrderByDescending(cd => cd.State)
+                    .ThenBy(cd => cd.Customer.LastName);
+                return;                
             }
-            
+
+            this.detailCampaigList.ItemsSource = this.campaignDetail
+                .OrderByDescending(cd => cd.State)
+                    .ThenBy(cd => cd.Customer.LastName);
         }
 
         private void ImageButton_Clicked(object sender, EventArgs e)
         {
             var item = ((ImageButton)sender).CommandParameter as CampaignDetail;
             PhoneDialer.Open(item.Customer.CellPhone);
-        }
-
-        private void detailCampaigList_ItemSelected(object sender, SelectedItemChangedEventArgs e)
-        {
-            this.detailCampaigList.SelectedItem = null;
-        }
+        }        
 
         private void SearchBar_TextChanged(object sender, TextChangedEventArgs e)
         {
             this.PopulateCampaignDetail(e.NewTextValue.Trim().ToUpper());
+        }               
+
+        private async void RefreshView_Refreshing(object sender, EventArgs e)
+        {
+            try
+            {
+                var response = await Synchronization.CheckDevicePermissions();
+                if (response) await Synchronization.SynchronizeTodayCalls();
+                this.searchBar.Text = string.Empty;
+                PopulateCampaignDetail();
+            }
+            finally
+            {
+                this.refreshView.IsRefreshing = false;
+            }
         }
     }
 }

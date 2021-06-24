@@ -9,7 +9,8 @@
             <StackLayout>
                 <Grid>
                     <BoxView BackgroundColor="#2BAEFC" HeightRequest="150"/>
-                    <Label Text="Kaizen" HorizontalOptions="Center" FontSize="Title" TextColor="White" Margin="15,75,0,0"/>
+                    <Label Text="Hello !" HorizontalOptions="Center" FontSize="Title" TextColor="White" Margin="15,25,0,0"/>
+                    <Label Text="{Binding Username}" HorizontalOptions="Center" FontSize="Body" TextColor="White" Margin="15,75,0,0"/>
                 </Grid>
                 <StackLayout Orientation="Horizontal" Margin="20,20,0,0" Spacing="20" 
                              xct:TouchEffect.AnimationDuration="150"

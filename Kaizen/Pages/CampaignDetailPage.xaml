@@ -1,35 +1,69 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:lottie="clr-namespace:Lottie.Forms;assembly=Lottie.Forms"
              x:Class="Kaizen.Pages.CampaignDetailPage"
              Title="Campaign Detail">
     <ContentPage.Content>
-        <StackLayout>
-            <SearchBar Placeholder="Search..." TextChanged="SearchBar_TextChanged"/>
-            <ListView x:Name="detailCampaigList" SeparatorColor="#BB2020" HasUnevenRows="True" ItemSelected="detailCampaigList_ItemSelected">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <StackLayout Orientation="Horizontal" Padding="5">
-                                <Image Source="miniBatman.png"/>
-                                <StackLayout HorizontalOptions="StartAndExpand">
-                                    <Label Text="{Binding Customer.FullName}" TextColor="#BB2020"/>
-                                    <Label Text="{Binding Customer.CellPhone}" TextColor="#BEC7C7"/>
-                                    <Label Text="{Binding TotalCallsNumberFormat}" TextColor="#BEC7C7"/>
-                                    <Label Text="{Binding LastValidCallDurationFormat}" TextColor="#BEC7C7"/>
-                                    <Label Text="{Binding LastValidCallDateFormat}" TextColor="#BEC7C7"/>
-                                    <Label Text="{Binding State}" TextColor="#FFEB4D"/>
-                                </StackLayout>
-                                <ImageButton Source="phone.png" 
+        <RefreshView x:Name="refreshView" Refreshing="RefreshView_Refreshing">
+            <StackLayout>
+                <SearchBar x:Name="searchBar" Placeholder="Search..." TextChanged="SearchBar_TextChanged"/>
+                <CollectionView x:Name="detailCampaigList" Margin="10">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Padding="5">
+                                <StackLayout Orientation="Horizontal" Padding="5">
+                                    <Image Source="miniBatman.png"/>
+                                    <StackLayout HorizontalOptions="StartAndExpand">
+                                        <Label Text="{Binding Customer.FullName}" TextColor="#BB2020" FontAttributes="Bold" FontSize="Title"/>
+                                        <Label Text="{Binding Customer.CellPhoneFormat}" TextColor="#BEC7C7"/>
+                                        <Label Text="{Binding Offer}" TextColor="#FFEB4D"/>
+                                        <Label Text="{Binding TotalCallsNumberFormat}" TextColor="#BEC7C7"/>
+                                        <Label Text="{Binding LastCallDurationFormat}" TextColor="#BEC7C7"/>
+                                        <Label Text="{Binding LastValidCallDurationFormat}" TextColor="#BB2020" FontSize="Caption" />
+                                        <Label Text="{Binding LastCallDateFormat}" TextColor="#BEC7C7"/>
+                                        <Label Text="{Binding LastValidCallDateFormat}" TextColor="#BB2020" FontSize="Caption" />
+                                        <Label Text="{Binding State}" TextColor="#FFEB4D" FontAttributes="Bold"/>
+                                    </StackLayout>
+                                    <ImageButton Source="phone.png" 
                                          Clicked="ImageButton_Clicked" 
                                          CommandParameter="{Binding .}" 
                                          BackgroundColor="Transparent"
                                          Margin="0,0,25,0"/>
+                                </StackLayout>
+
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+
+                    <CollectionView.EmptyView>
+                        <ContentView>
+                            <StackLayout>
+                                <StackLayout Orientation="Horizontal" Margin="0,0,0,0">
+                                    <lottie:AnimationView x:Name="lottie" 
+                                                          Animation="ghost.json" 
+                                                          AutoPlay="True" 
+                                                          RepeatMode="Infinite" 
+                                                          WidthRequest="350" 
+                                                          HeightRequest="350"
+                                                          VerticalOptions="CenterAndExpand"
+                                                          HorizontalOptions="CenterAndExpand">
+                                    </lottie:AnimationView>
+                                </StackLayout>
+                                <StackLayout Margin="0,-50">
+                                    <Label Text="¡ We didn't find any offers available !"
+                                   FontAttributes="Bold"
+                                   FontSize="Default"
+                                   TextColor="#BEC7C7" 
+                                   HorizontalOptions="Fill"
+                                   HorizontalTextAlignment="Center" />
+                                </StackLayout>
                             </StackLayout>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </StackLayout>        
+                        </ContentView>
+                    </CollectionView.EmptyView>
+                </CollectionView>
+            </StackLayout>
+        </RefreshView>    
+        
     </ContentPage.Content>
 </ContentPage>

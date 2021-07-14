@@ -45,7 +45,7 @@ namespace Kaizen.Core
                 }
                 else
                 {
-                    return new SynchronizeResponse { Response = false, Message = "Synchronize Today Calls" };                    
+                    return new SynchronizeResponse { Response = false, Message = "No calls to sync today" };                    
                 }
             }
             catch

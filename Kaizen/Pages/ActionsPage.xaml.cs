@@ -1,7 +1,6 @@
 ﻿using Acr.UserDialogs;
 using Kaizen.Core;
 using System;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 

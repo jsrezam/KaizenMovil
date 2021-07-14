@@ -70,7 +70,15 @@ namespace Kaizen.Pages
             }
             
             var apiService = new ApiService();
-            await apiService.CloseCampaign(campaign);
+            var response = await apiService.CloseCampaign(campaign);
+            if (!response)
+            {
+                await DisplayAlert(
+                    title: "Kaizen",
+                    message: "Something went wrong closing the campaign !",
+                    cancel: "OK");
+                return;
+            }
             PopulateCampaigns();
         }
     }

@@ -1,10 +1,7 @@
 ﻿using Kaizen.Models;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -110,14 +107,11 @@ namespace Kaizen.Services
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 var json = JsonConvert.SerializeObject(new { 
-                    Id = campaign.Id,
-                    UserId = campaign.User.Id,
-                    StartDate = campaign.StartDate,
-                    FinishDate = campaign.FinishDate,
-                    IsActive =  false
+                    Id = campaign.Id
                 });
+
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await this.httpClient.PutAsync($"{this.apiEndpoint}/campaigns/{campaign.Id}", content);
+                var response = await this.httpClient.PostAsync($"{this.apiEndpoint}/campaigns/close", content);
                 return response.IsSuccessStatusCode;
             }
             catch

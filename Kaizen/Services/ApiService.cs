@@ -4,8 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
 using Xamarin.Essentials;
 
 namespace Kaizen.Services
@@ -56,14 +58,12 @@ namespace Kaizen.Services
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await this.httpClient.PostAsync($"{this.apiEndpoint}/accounts/signUp", content);
             var contentResponse = await response.Content.ReadAsStringAsync();
-            
-
 
             if (response.IsSuccessStatusCode)
                 return response.IsSuccessStatusCode;
-            else 
-                throw new Exception(ParseErrorsAPI(JsonConvert
-                    .DeserializeObject<IEnumerable<SignUpResponse>>(contentResponse)));
+            else {                               
+                throw new Exception(ParseErrorsAPI(contentResponse));
+            }
         }
 
         public async Task<QueryResult<Campaign>> GetAgentValidCampaigns()
@@ -120,13 +120,39 @@ namespace Kaizen.Services
             }
         }
 
-        private string ParseErrorsAPI(IEnumerable<SignUpResponse> responses) 
+        private string ParseErrorsAPI(string contentResponse) 
         {
+
             string messageError = string.Empty;
-            foreach (var response in responses)
+            Type typeSignUpUserInfoResponse = typeof(SignUpUserInfoResponse);            
+            PropertyInfo[] proptypeSignUpUserInfoResponse = typeSignUpUserInfoResponse.GetProperties(BindingFlags.Public | BindingFlags.Instance);            
+
+            foreach (var item in proptypeSignUpUserInfoResponse)
             {
-                messageError += response.Description + "\n";
+                if (contentResponse.Contains(item.Name))
+                {
+                    var signUpUserInfoResponse = JsonConvert.DeserializeObject<SignUpUserInfoResponse>(contentResponse);
+
+                    if (signUpUserInfoResponse.Email == null) signUpUserInfoResponse.Email = new List<string>();
+                    if (signUpUserInfoResponse.IdentificationCard == null) signUpUserInfoResponse.IdentificationCard = new List<string>();
+                    if (signUpUserInfoResponse.PhoneNumber == null) signUpUserInfoResponse.PhoneNumber = new List<string>();
+                    if (signUpUserInfoResponse.UserName == null) signUpUserInfoResponse.UserName = new List<string>();
+
+                    var signUpUserErrors = signUpUserInfoResponse.Email.Concat(signUpUserInfoResponse.IdentificationCard)
+                        .Concat(signUpUserInfoResponse.PhoneNumber)
+                        .Concat(signUpUserInfoResponse.UserName);
+
+                    foreach (var error in signUpUserErrors) { messageError += error + "\n";}
+                    break;
+                }
             }
+
+            if (messageError.Equals(string.Empty)) 
+            {
+                var SignUpErrors = JsonConvert.DeserializeObject<IEnumerable<SignUpResponse>>(contentResponse);
+                foreach (var response in SignUpErrors){ messageError += response.Description + "\n";}
+            }    
+            
             return messageError;
         }
     }

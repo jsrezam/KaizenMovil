@@ -15,15 +15,15 @@
                                 <StackLayout Orientation="Horizontal" Padding="5">
                                     <Image Source="miniBatman.png"/>
                                     <StackLayout HorizontalOptions="StartAndExpand">
-                                        <Label Text="{Binding Customer.FullName}" TextColor="#BB2020" FontAttributes="Bold" FontSize="Title"/>
-                                        <Label Text="{Binding Customer.CellPhoneFormat}" TextColor="#BEC7C7"/>
-                                        <Label Text="{Binding Offer}" TextColor="#FFEB4D"/>
-                                        <Label Text="{Binding TotalCallsNumberFormat}" TextColor="#BEC7C7"/>
-                                        <Label Text="{Binding LastCallDurationFormat}" TextColor="#BEC7C7"/>
-                                        <Label Text="{Binding LastValidCallDurationFormat}" TextColor="#BB2020" FontSize="Caption" />
-                                        <Label Text="{Binding LastCallDateFormat}" TextColor="#BEC7C7"/>
-                                        <Label Text="{Binding LastValidCallDateFormat}" TextColor="#BB2020" FontSize="Caption" />
-                                        <Label Text="{Binding State}" TextColor="#FFEB4D" FontAttributes="Bold"/>
+                                        <Label Text="{Binding Customer.FullName}" TextColor="#730217" FontAttributes="Bold" FontSize="Title"/>
+                                        <Label Text="{Binding Customer.CellPhoneFormat}" TextColor="#737373"/>
+                                        <Label Text="{Binding Offer}" TextColor="#5CB9F2"/>
+                                        <Label Text="{Binding TotalCallsNumberFormat}" TextColor="#737373"/>
+                                        <Label Text="{Binding LastCallDurationFormat}" TextColor="#737373"/>
+                                        <Label Text="{Binding LastValidCallDurationFormat}" TextColor="#730217" FontSize="Caption" />
+                                        <Label Text="{Binding LastCallDateFormat}" TextColor="#737373"/>
+                                        <Label Text="{Binding LastValidCallDateFormat}" TextColor="#730217" FontSize="Caption" />
+                                        <Label Text="{Binding State}" TextColor="#5CB9F2" FontAttributes="Bold"/>
                                     </StackLayout>
                                     <ImageButton Source="phone.png" 
                                          Clicked="ImageButton_Clicked" 
@@ -54,7 +54,7 @@
                                     <Label Text="¡ We didn't find any offers available !"
                                    FontAttributes="Bold"
                                    FontSize="Default"
-                                   TextColor="#BEC7C7" 
+                                   TextColor="#737373" 
                                    HorizontalOptions="Fill"
                                    HorizontalTextAlignment="Center" />
                                 </StackLayout>

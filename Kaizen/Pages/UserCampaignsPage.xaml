@@ -26,16 +26,16 @@
                                         <RowDefinition Height="0.33*"/>
                                         <RowDefinition Height="0.33*"/>
                                     </Grid.RowDefinitions>
-                                    <Label Text="ID" TextColor="#BB2020" Grid.Row="0" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="Center"/>
-                                    <Label Text="{Binding Id}" TextColor="#BEC7C7" Grid.Row="0" Grid.Column="1" VerticalOptions="Center" HorizontalOptions="Center" />
-                                    <Label Text="StartDate" TextColor="#BB2020" Grid.Row="1" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="Center"/>
-                                    <Label Text="{Binding StartDate}" TextColor="#BEC7C7" Grid.Row="1" Grid.Column="1" VerticalOptions="Center" HorizontalOptions="Center" />
-                                    <Label Text="FinishDate" TextColor="#BB2020" Grid.Row="2" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="Center"/>
-                                    <Label Text="{Binding FinishDate}" TextColor="#BEC7C7" Grid.Row="2" Grid.Column="1" VerticalOptions="Center" HorizontalOptions="Center"/>
-                                    <Label Text="Progress" TextColor="#BB2020" Grid.Row="0" Grid.Column="2" VerticalOptions="Center" HorizontalOptions="Center"/>
-                                    <ProgressBar Progress="{Binding BarProgress}" ProgressColor="#FFEB4D" Grid.Row="1" Grid.Column="2" />
-                                    <Label Text="{Binding ProgressFormat}" TextColor="#FFEB4D" Grid.Row="2" Grid.Column="2" VerticalOptions="Center" HorizontalOptions="Center"/>
-                                    <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Text="Close Campaign" CornerRadius="9" BackgroundColor="Black" Clicked="Button_Clicked" CommandParameter="{Binding .}"  />
+                                    <Label Text="ID" TextColor="#730217" Grid.Row="0" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="Center"/>
+                                    <Label Text="{Binding Id}" TextColor="#737373" Grid.Row="0" Grid.Column="1" VerticalOptions="Center" HorizontalOptions="Center" />
+                                    <Label Text="StartDate" TextColor="#730217" Grid.Row="1" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="Center"/>
+                                    <Label Text="{Binding StartDate}" TextColor="#737373" Grid.Row="1" Grid.Column="1" VerticalOptions="Center" HorizontalOptions="Center" />
+                                    <Label Text="FinishDate" TextColor="#730217" Grid.Row="2" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="Center"/>
+                                    <Label Text="{Binding FinishDate}" TextColor="#737373" Grid.Row="2" Grid.Column="1" VerticalOptions="Center" HorizontalOptions="Center"/>
+                                    <Label Text="Progress" TextColor="#730217" Grid.Row="0" Grid.Column="2" VerticalOptions="Center" HorizontalOptions="Center"/>
+                                    <ProgressBar Progress="{Binding BarProgress}" ProgressColor="#5CB9F2" Grid.Row="1" Grid.Column="2" />
+                                    <Label Text="{Binding ProgressFormat}" TextColor="#5CB9F2" Grid.Row="2" Grid.Column="2" VerticalOptions="Center" HorizontalOptions="Center"/>
+                                    <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Text="Close Campaign" CornerRadius="9" BackgroundColor="#F28379" TextColor="#737373" Clicked="Button_Clicked" CommandParameter="{Binding .}"  />
                                 </Grid>
                             </Frame>
                         </DataTemplate>

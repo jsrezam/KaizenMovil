@@ -1,9 +1,5 @@
 ﻿using Kaizen.Services;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -43,7 +39,11 @@ namespace Kaizen.Pages
             try
             {
                 this.activityIndicator.IsRunning = true;
-                if (string.IsNullOrEmpty(EnTEmail.Text) || string.IsNullOrEmpty(EnTPassword.Text)) return;
+                if (string.IsNullOrEmpty(EnTEmail.Text) || string.IsNullOrEmpty(EnTPassword.Text)) 
+                {
+                    await DisplayAlert("Info", "Make sure you have entered all the fields", "Alright");
+                    return;
+                } 
                 await apiService.Login(EnTEmail.Text, EnTPassword.Text);
                 Application.Current.MainPage = new MasterPage(EnTEmail.Text);
                 this.activityIndicator.IsRunning = false;
@@ -51,7 +51,11 @@ namespace Kaizen.Pages
             catch (Exception ex)
             {
 
-                await DisplayAlert("Error", ex.Message, "Alright"); 
+                await DisplayAlert("Error", ex.Message, "Alright");
+                this.activityIndicator.IsRunning = false;
+            }
+            finally 
+            {
                 this.activityIndicator.IsRunning = false;
             }           
             

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Kaizen.Models
+﻿namespace Kaizen.Models
 {
     public class UserCredentials
     {
